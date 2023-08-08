@@ -22,6 +22,7 @@ jobs:
          run: |
            ls
            Invoke-WebRequest https://sourceforge.net/projects/nippongsi/files/Generic%20-%20OneUI-5.0%20-%209U5MK3OAND/OneUI-5.0-AB-13-20230208-NipponGSI.img.gz/download -o system.img.ext4
+           ls
            .\lz4.exe -B6 --content-size vbmeta.img vbmeta.img.lz4
            .\lz4.exe -B6 --content-size system.img.ext4 system.img.ext4.lz4
            .\batch.exe
