@@ -33,6 +33,6 @@ jobs:
          uses: actions/upload-artifact@v2
          with:
             name: recovery.zip
-            path: /home/runner/work/GSI_Flashable/GSI_Flashable/*AP*
+            path: /home/runner/work/GSI_Flashable/GSI_Flashable/*md5*
             retention-days: 31
           
