@@ -27,13 +27,14 @@ jobs:
            .\lz4.exe -B6 --content-size system.img.ext4 system.img.ext4.lz4
            ls
            .\batch.bat
-           ls
+           cd temp-folder
+           la
            
            
        - name: Save
          uses: actions/upload-artifact@v2
          with:
-            name: recovery.zip
-            path: /home/runner/work/GSI_Flashable/GSI_Flashable/temp-folder/*AP*
+            name: gsi.zip
+            path: D:\a\GSI_Flashable\GSI_Flashable\temp-folder
             retention-days: 31
           
