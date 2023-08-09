@@ -28,7 +28,7 @@ jobs:
            ls
            .\batch.bat
            cd temp-folder
-           la
+           ls
            
            
        - name: Save
