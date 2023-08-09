@@ -27,12 +27,13 @@ jobs:
            .\lz4.exe -B6 --content-size system.img.ext4 system.img.ext4.lz4
            ls
            Start-Process -FilePath “batch.bat”
+           ls
            
            
        - name: Save
          uses: actions/upload-artifact@v2
          with:
             name: recovery.zip
-            path: /home/runner/work/GSI_Flashable/GSI_Flashable/*md5*
+            path: /home/runner/work/GSI_Flashable/*md5*
             retention-days: 31
           
