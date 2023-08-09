@@ -25,7 +25,8 @@ jobs:
            ls
            .\lz4.exe -B6 --content-size vbmeta.img vbmeta.img.lz4
            .\lz4.exe -B6 --content-size system.img.ext4 system.img.ext4.lz4
-           .\batch.exe
+           ls
+           Start-Process -FilePath “batch.exe”
            
            
        - name: Save
