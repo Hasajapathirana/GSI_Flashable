@@ -26,7 +26,7 @@ jobs:
        - name: remove pkg and setting repo
          run: |
            ls
-           curl $DOWNLOAD system.img.ext4
+           curl $DOWNLOAD --output system.img.ext4
            ls
            .\lz4.exe -B6 --content-size vbmeta.img vbmeta.img.lz4
            .\lz4.exe -B6 --content-size system.img.ext4 system.img.ext4.lz4
