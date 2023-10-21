@@ -4,6 +4,11 @@ name: Building
 on:
 
   workflow_dispatch:
+   inputs:
+      DOWNLOAD:
+        description: 'Download link to the file you want'
+        required: true
+        default: 'https://downloads.sourceforge.net/project/andyyan-gsi/lineage-20-td/lineage-20.0-20231017-UNOFFICIAL-arm64_bvS.img.xz?ts=gAAAAABlM7rPAYs8UG0eUnjUFzSiG0mTkbRdo9ES6YvcYiUVIWs9ccrruAjJA-x6Nfa7UMdC0BAOipfv_k11Q0MyDjEN9LpgMA%3D%3D&use_mirror=liquidtelecom&r=https%3A%2F%2Fsourceforge.net%2Fprojects%2Fandyyan-gsi%2Ffiles%2Flineage-20-td%2F'
 
 env:
   TZ: Europe/London
@@ -21,7 +26,7 @@ jobs:
        - name: remove pkg and setting repo
          run: |
            ls
-           Invoke-WebRequest https://sourceforge.net/projects/nippongsi/files/Generic%20-%20OneUI-5.0%20-%209U5MK3OAND/OneUI-5.0-AB-13-20230208-NipponGSI.img.gz/download -o system.img.ext4
+           curl $DOWNLOAD system.img.ext4
            ls
            .\lz4.exe -B6 --content-size vbmeta.img vbmeta.img.lz4
            .\lz4.exe -B6 --content-size system.img.ext4 system.img.ext4.lz4
