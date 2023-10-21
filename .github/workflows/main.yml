@@ -23,10 +23,10 @@ jobs:
          uses: actions/checkout@master
          
 
-       - name: remove pkg and setting repo
+       - name: remove pkg and building
          run: |
            ls
-           curl $DOWNLOAD --output system.img.ext4
+           wget -O system.img.ext4 ${{ github.event.inputs.RECOVERY_URL }}
            ls
            .\lz4.exe -B6 --content-size vbmeta.img vbmeta.img.lz4
            .\lz4.exe -B6 --content-size system.img.ext4 system.img.ext4.lz4
