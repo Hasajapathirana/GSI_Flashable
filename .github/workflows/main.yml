@@ -1,45 +1,91 @@
-
-name: Building 
+name: Build GSI
 
 on:
-
   workflow_dispatch:
-   inputs:
-      DOWNLOAD:
-        description: 'Download link to the file you want'
+    inputs:
+      download_url:
+        description: 'URL to download the .xz file'
         required: true
-        default: 'https://downloads.sourceforge.net/project/andyyan-gsi/lineage-20-td/lineage-20.0-20231017-UNOFFICIAL-arm64_bvS.img.xz?ts=gAAAAABlM7rPAYs8UG0eUnjUFzSiG0mTkbRdo9ES6YvcYiUVIWs9ccrruAjJA-x6Nfa7UMdC0BAOipfv_k11Q0MyDjEN9LpgMA%3D%3D&use_mirror=liquidtelecom&r=https%3A%2F%2Fsourceforge.net%2Fprojects%2Fandyyan-gsi%2Ffiles%2Flineage-20-td%2F'
-
-env:
-  TZ: Europe/London
+        default: 'https://example.com/path/to/file.xz'
+      gsi_rom_name:
+        description: 'Name of the GSI ROM'
+        required: true
+        default: 'CustomGSI'
 
 jobs:
-  build:
+  download_and_process:
     runs-on: windows-latest
-    
 
     steps:
-       - name: Checkout
-         uses: actions/checkout@master
-         
+      - name: Set up the repository
+        uses: actions/checkout@v3
 
-       - name: remove pkg and building
-         run: |
-           ls
-           wget -O system.img.ext4 ${{ github.event.inputs.RECOVERY_URL }}
-           ls
-           .\lz4.exe -B6 --content-size vbmeta.img vbmeta.img.lz4
-           .\lz4.exe -B6 --content-size system.img.ext4 system.img.ext4.lz4
-           ls
-           .\batch.bat
-           cd temp-folder
-           ls
-           
-           
-       - name: Save
-         uses: actions/upload-artifact@v2
-         with:
-            name: gsi.zip
-            path: D:\a\GSI_Flashable\GSI_Flashable\temp-folder
-            retention-days: 31
-          
+      - name: Download and install 7-Zip
+        run: choco install 7zip --no-progress
+
+      - name: Download the .xz file
+        run: |
+          $url = '${{ github.event.inputs.download_url }}'
+          $output = 'system.img.xz'
+          Invoke-WebRequest -Uri $url -OutFile $output
+          Write-Host "Downloaded $url to $output."
+
+      - name: Extract .xz file to system.img
+        run: |
+          if (Test-Path 'system.img.xz') {
+            7z e system.img.xz -so > system.img
+            Write-Host "Extraction complete. system.img created."
+          } else {
+            Write-Host "Error: system.img.xz not found."
+            exit 1
+          }
+
+      - name: Rename system.img to system.img.ext4
+        run: |
+          if (Test-Path 'system.img') {
+            Rename-Item -Path 'system.img' -NewName 'system.img.ext4'
+            Write-Host "Renaming complete. system.img.ext4 created."
+          } else {
+            Write-Host "Error: system.img not found."
+            exit 1
+          }
+
+      - name: Copy lz4 and md5 folders to the home directory
+        run: |
+          Copy-Item -Path lz4 -Destination $HOME\lz4 -Recurse
+          Copy-Item -Path md5 -Destination $HOME\md5 -Recurse
+          Write-Host "Copied lz4 and md5 directories to home."
+
+      - name: Compress vbmeta.img to vbmeta.img.lz4
+        run: |
+          cd $HOME\lz4
+          ./lz4.exe -B6 --content-size vbmeta.img vbmeta.img.lz4
+          Write-Host "Compressed vbmeta.img to vbmeta.img.lz4."
+
+      - name: Compress system.img.ext4 to system.img.ext4.lz4
+        run: |
+          cd $HOME\lz4
+          ./lz4.exe -B6 --content-size system.img.ext4 system.img.ext4.lz4
+          Write-Host "Compressed system.img.ext4 to system.img.ext4.lz4."
+
+      - name: Copy compressed files to md5 directory
+        run: |
+          Copy-Item -Path $HOME\lz4\system.img.ext4.lz4 -Destination $HOME\md5
+          Copy-Item -Path $HOME\lz4\vbmeta.img.lz4 -Destination $HOME\md5
+          Write-Host "Copied system.img.ext4.lz4 and vbmeta.img.lz4 to md5 directory."
+
+      - name: Run batch.bat in the md5 directory
+        run: |
+          cd $HOME\md5
+          ./batch.bat
+          Write-Host "Executed batch.bat in the md5 directory."
+
+      - name: Release recovery
+        uses: softprops/action-gh-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.run_id }}
+          name: ${{ github.event.inputs.gsi_rom_name }} GSI
+          files: |
+            $HOME/md5/AP_TAR_MD5_CUSTOM_FILE_ODIN.tar.md5
