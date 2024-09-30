@@ -76,7 +76,7 @@ jobs:
 
       - name: Run batch.bat in the md5 directory
         run: |
-          cd $HOME\md5
+          cd $HOME\tar-md5-script-tool\
           ./batch.bat
           Write-Host "Executed batch.bat in the md5 directory."
 
@@ -88,4 +88,4 @@ jobs:
           tag_name: ${{ github.run_id }}
           name: ${{ github.event.inputs.gsi_rom_name }} GSI
           files: |
-            $HOME/md5/AP_TAR_MD5_CUSTOM_FILE_ODIN.tar.md5
+            $HOME/tar-md5-script-tool/AP_TAR_MD5_CUSTOM_FILE_ODIN.tar.md5
