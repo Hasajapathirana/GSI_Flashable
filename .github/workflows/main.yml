@@ -57,7 +57,7 @@ jobs:
       - name: Copy lz4 and md5 folders to the home directory
         run: |
           Copy-Item -Path lz4 -Destination $HOME\lz4 -Recurse
-          Copy-Item -Path md5 -Destination $HOME\md5 -Recurse
+          Copy-Item -Path md5 -Destination $HOME\tar-md5-script-tool-Recurse
           Write-Host "Copied lz4 and md5 directories to home."
 
       - name: Compress vbmeta.img to vbmeta.img.lz4
@@ -74,8 +74,8 @@ jobs:
 
       - name: Copy compressed files to md5 directory
         run: |
-          Copy-Item -Path $HOME\lz4\system.img.ext4.lz4 -Destination $HOME\md5
-          Copy-Item -Path $HOME\lz4\vbmeta.img.lz4 -Destination $HOME\md5
+          Copy-Item -Path $HOME\lz4\system.img.ext4.lz4 -Destination $HOME\tar-md5-script-tool
+          Copy-Item -Path $HOME\lz4\vbmeta.img.lz4 -Destination $HOME\tar-md5-script-tool
           Write-Host "Copied system.img.ext4.lz4 and vbmeta.img.lz4 to md5 directory."
 
 
