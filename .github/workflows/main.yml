@@ -46,13 +46,10 @@ jobs:
 
       - name: Rename system.img to system.img.ext4
         run: |
-          if (Test-Path 'system.img') {
+            ls
             Rename-Item -Path 'system.img' -NewName 'system.img.ext4'
-            Write-Host "Renaming complete. system.img.ext4 created."
-          } else {
-            Write-Host "Error: system.img not found."
-            exit 1
-          }
+            ls
+            
 
       - name: Copy lz4 and md5 folders to the home directory
         run: |
