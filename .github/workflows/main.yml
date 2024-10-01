@@ -12,6 +12,7 @@ on:
         required: true
         default: 'CustomGSI'
 
+
 jobs:
   download_and_process:
     runs-on: windows-latest
@@ -20,20 +21,23 @@ jobs:
       - name: Set up the repository
         uses: actions/checkout@v3
 
-      - name: Download and install 7-Zip
-        run: choco install 7zip --no-progress
-
-      - name: Download the .xz file
+      - name: Download the .xz file using curl
         run: |
           $url = '${{ github.event.inputs.download_url }}'
           $output = 'system.img.xz'
-          Invoke-WebRequest -Uri $url -OutFile $output
-          Write-Host "Downloaded $url to $output."
+          curl -L $url -o $output
+          if (Test-Path 'system.img.xz') {
+            $fileSize = (Get-Item $output).length
+            Write-Host "Downloaded $url to $output. File size: $fileSize bytes."
+          } else {
+            Write-Host "Error: Download failed or file not found."
+            exit 1
+          }
 
-      - name: Extract .xz file to system.img
+      - name: Extract the .xz file using tar
         run: |
           if (Test-Path 'system.img.xz') {
-            7z e system.img.xz -so > system.img
+            tar -xf system.img.xz
             Write-Host "Extraction complete. system.img created."
           } else {
             Write-Host "Error: system.img.xz not found."
@@ -73,6 +77,7 @@ jobs:
           Copy-Item -Path $HOME\lz4\system.img.ext4.lz4 -Destination $HOME\md5
           Copy-Item -Path $HOME\lz4\vbmeta.img.lz4 -Destination $HOME\md5
           Write-Host "Copied system.img.ext4.lz4 and vbmeta.img.lz4 to md5 directory."
+
 
       - name: Run batch.bat in the md5 directory
         run: |
