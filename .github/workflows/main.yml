@@ -37,7 +37,7 @@ jobs:
       - name: Extract the .xz file using tar
         run: |
           if (Test-Path 'system.img.xz') {
-            tar -xf system.img.xz
+            tar -xvf system.img.xz
             Write-Host "Extraction complete. system.img created."
           } else {
             Write-Host "Error: system.img.xz not found."
