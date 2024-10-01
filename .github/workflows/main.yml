@@ -23,7 +23,7 @@ jobs:
  
       - name: Download 7zip 
         run: |
-           wget https://www.7-zip.org/a/7z2301-x64.exe -O 7zip_installer.exe
+           curl https://www.7-zip.org/a/7z2301-x64.exe -O 7zip_installer.exe
            7zip_installer.exe /S         
 
       - name: Download the .xz 
