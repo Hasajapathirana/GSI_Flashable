@@ -23,7 +23,8 @@ jobs:
  
       - name: Download 7zip 
         run: |
-           curl https://www.7-zip.org/a/7z2301-x64.exe -O 7zip_installer.exe
+           choco install wget
+           wget https://www.7-zip.org/a/7z2301-x64.exe -O 7zip_installer.exe
            7zip_installer.exe /S         
 
       - name: Download the .xz 
