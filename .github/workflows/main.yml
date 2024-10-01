@@ -20,8 +20,13 @@ jobs:
     steps:
       - name: Set up the repository
         uses: actions/checkout@v3
+ 
+      - name: Download 7zip 
+        run: |
+           wget https://www.7-zip.org/a/7z2301-x64.exe -O 7zip_installer.exe
+           7zip_installer.exe /S         
 
-      - name: Download the .xz file using curl
+      - name: Download the .xz 
         run: |
           $url = '${{ github.event.inputs.download_url }}'
           $output = 'system.img.xz'
@@ -36,13 +41,7 @@ jobs:
 
       - name: Extract the .xz file using tar
         run: |
-          if (Test-Path 'system.img.xz') {
-            tar -xvf system.img.xz
-            Write-Host "Extraction complete. system.img created."
-          } else {
-            Write-Host "Error: system.img.xz not found."
-            exit 1
-          }
+          '"C:\Program Files\7-Zip\7z.exe" e system.img.xz -o.\extracted'
 
       - name: Rename system.img to system.img.ext4
         run: |
