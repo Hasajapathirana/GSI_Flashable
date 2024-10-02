@@ -54,7 +54,7 @@ jobs:
             
       - name: Copy lz4 and md5 folders to the home directory
         run: |
-          Copy-Item system.img.ext4 -Destination "$HOME\lz4\"
+          robocopy . "$HOME\lz4\" system.img.ext4
           cd lz4
           ls
 
@@ -69,8 +69,8 @@ jobs:
           cd lz4
           ./lz4.exe -B6 --content-size system.img.ext4 system.img.ext4.lz4
           Write-Host "Compressed system.img.ext4 to system.img.ext4.lz4."
-          Copy-Item system.img.ext4.lz4 -Destination "$HOME\tar-md5-script-tool\"
-          Copy-Item vbmeta.img.lz4 -Destination "$HOME\tar-md5-script-tool\"
+          robocopy . "$HOME\tar-md5-script-tool\" system.img.ext4.lz4
+          robocopy . "$HOME\tar-md5-script-tool\" vbmeta.img.lz4
 
       - name: Check md5 directory
         run: |
