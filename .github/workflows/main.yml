@@ -54,7 +54,7 @@ jobs:
             
       - name: Copy lz4 and md5 folders to the home directory
         run: |
-          cp system.img.ext4 $HOME\tar-md5-script-tool\
+          cp system.img.ext4 $HOME/tar-md5-script-tool/
           cd tar-md5-script-tool 
           ls
 
@@ -72,8 +72,8 @@ jobs:
 
       - name: Copy compressed files to md5 directory
         run: |
-          cp $HOME\lz4\system.img.ext4.lz4 $HOME\tar-md5-script-tool
-          cp $HOME\lz4\vbmeta.img.lz4 $HOME\tar-md5-script-tool
+          cp "$HOME/lz4/system.img.ext4.lz4" "$HOME/tar-md5-script-tool"
+          cp "$HOME/lz4/vbmeta.img.lz4" "$HOME/tar-md5-script-tool"
           cd tar-md5-script-tool 
           ls
           
@@ -81,7 +81,7 @@ jobs:
 
       - name: Run batch.bat in the md5 directory
         run: |
-          cd $HOME\tar-md5-script-tool\
+          cd tar-md5-script-tool
           ./batch.bat
           Write-Host "Executed batch.bat in the md5 directory."
 
