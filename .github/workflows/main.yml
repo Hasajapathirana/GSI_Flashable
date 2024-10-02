@@ -14,7 +14,7 @@ on:
 
 
 jobs:
-  download_and_process:
+   Download_and_build_gsi :
     runs-on: windows-latest
 
     steps:
@@ -42,30 +42,25 @@ jobs:
 
       - name: Extract the .xz file using tar
         run: |
-          '"C:\Program Files\7-Zip\7z.exe" e system.img.xz -o.\extracted'
+           ls
+           7z e system.img.xz
+           ls  
 
       - name: Rename system.img to system.img.ext4
         run: |
             ls
             Rename-Item -Path 'system.img' -NewName 'system.img.ext4'
             ls
-            
-
-      - name: Copy lz4 and md5 folders to the home directory
-        run: |
-          Copy-Item -Path lz4 -Destination $HOME\lz4 -Recurse
-          Copy-Item -Path md5 -Destination $HOME\tar-md5-script-tool-Recurse
-          Write-Host "Copied lz4 and md5 directories to home."
-
+           
       - name: Compress vbmeta.img to vbmeta.img.lz4
         run: |
-          cd $HOME\lz4
+          cd lz4
           ./lz4.exe -B6 --content-size vbmeta.img vbmeta.img.lz4
           Write-Host "Compressed vbmeta.img to vbmeta.img.lz4."
 
       - name: Compress system.img.ext4 to system.img.ext4.lz4
         run: |
-          cd $HOME\lz4
+          cd lz4
           ./lz4.exe -B6 --content-size system.img.ext4 system.img.ext4.lz4
           Write-Host "Compressed system.img.ext4 to system.img.ext4.lz4."
 
