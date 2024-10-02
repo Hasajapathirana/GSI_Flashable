@@ -51,7 +51,13 @@ jobs:
             ls
             Rename-Item -Path 'system.img' -NewName 'system.img.ext4'
             ls
-           
+            
+      - name: Copy lz4 and md5 folders to the home directory
+        run: |
+          Copy-Item -Path lz4 -Destination $HOME\lz4 -Recurse
+          Copy-Item -Path tar-md5-script-tool -Destination $HOME\tar-md5-script-tool -Recurse
+          Write-Host "Copied lz4 and md5 directories to home    
+
       - name: Compress vbmeta.img to vbmeta.img.lz4
         run: |
           cd lz4
