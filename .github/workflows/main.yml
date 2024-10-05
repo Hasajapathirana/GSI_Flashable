@@ -30,7 +30,7 @@ jobs:
       - name: Download the .xz 
         run: |
           $url = '${{ github.event.inputs.download_url }}'
-          $output = 'system.img.xz'
+          $output = 'tar-md5-script-tool\system.img.xz'
           curl -L $url -o $output
           if (Test-Path 'system.img.xz') {
             $fileSize = (Get-Item $output).length
@@ -42,35 +42,29 @@ jobs:
 
       - name: Extract the .xz file using tar
         run: |
-           ls
+           cd tar-md5-script-tool
            7z e system.img.xz
            ls  
 
       - name: Rename system.img to system.img.ext4
         run: |
+            cd tar-md5-script-tool
             ls
             Rename-Item -Path 'system.img' -NewName 'system.img.ext4'
             ls
-            
-      - name: Copy lz4 and md5 folders to the home directory
-        run: |
-          robocopy . "$HOME\lz4\" system.img.ext4
-          cd lz4
-          ls
 
       - name: Compress vbmeta.img to vbmeta.img.lz4
         run: |
-          cd lz4
-          ./lz4.exe -B6 --content-size vbmeta.img vbmeta.img.lz4
+          cd tar-md5-script-tool
+          ./$HOME\lz4.exe -B6 --content-size vbmeta.img vbmeta.img.lz4
           Write-Host "Compressed vbmeta.img to vbmeta.img.lz4."
 
       - name: Compress system.img.ext4 to system.img.ext4.lz4
         run: |
-          cd lz4
-          ./lz4.exe -B6 --content-size system.img.ext4 system.img.ext4.lz4
+          cd tar-md5-script-tool
+          ./$HOME\lz4.exe -B6 --content-size system.img.ext4 system.img.ext4.lz4
           Write-Host "Compressed system.img.ext4 to system.img.ext4.lz4."
-          robocopy . "$HOME\tar-md5-script-tool\" system.img.ext4.lz4
-          robocopy . "$HOME\tar-md5-script-tool\" vbmeta.img.lz4
+          rm -f system.img.ext4       
 
       - name: Check md5 directory
         run: |
