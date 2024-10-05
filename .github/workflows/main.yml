@@ -32,13 +32,7 @@ jobs:
           $url = '${{ github.event.inputs.download_url }}'
           $output = 'tar-md5-script-tool\system.img.xz'
           curl -L $url -o $output
-          if (Test-Path 'system.img.xz') {
-            $fileSize = (Get-Item $output).length
-            Write-Host "Downloaded $url to $output. File size: $fileSize bytes."
-          } else {
-            Write-Host "Error: Download failed or file not found."
-            exit 1
-          }
+          
 
       - name: Extract the .xz file using tar
         run: |
