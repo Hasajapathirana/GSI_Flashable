@@ -30,7 +30,8 @@ jobs:
       - name: Download the .xz 
         run: |
           $url = '${{ github.event.inputs.download_url }}'
-          $output = 'tar-md5-script-tool\system.img.xz'
+          $output = 'system.img.xz'
+          cd tar-md5-script-tool
           curl -L $url -o $output
           
 
