@@ -77,4 +77,4 @@ jobs:
           tag_name: ${{ github.run_id }}
           name: ${{ github.event.inputs.gsi_rom_name }} GSI
           files: |
-           D:\a\GSI_Flashable\GSI_Flashable\tar-md5-script-tool\temp-folder\*md5*
+           tar-md5-script-tool\temp-folder\
