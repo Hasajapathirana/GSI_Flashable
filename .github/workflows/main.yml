@@ -33,15 +33,6 @@ jobs:
           $output = 'system.img.xz'
           cd tar-md5-script-tool
           curl -L $url -o $output
-          
-      - name: Download choco
-        run: |
-         Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
-         choco -v
-
-      - name: Install lz4
-        run: |
-         choco install lz4
          
       - name: Extract the .xz file using tar
         run: |
@@ -58,15 +49,14 @@ jobs:
 
       - name: Compress vbmeta.img to vbmeta.img.lz4
         run: |
-          cd tar-md5-script-tool
-          lz4 -B6 --content-size vbmeta.img vbmeta.img.lz4
+          ./lz4/lz4.exe -B6 --content-size tar-md5-script-tool/vbmeta.img vbmeta.img.lz4
           Write-Host "Compressed vbmeta.img to vbmeta.img.lz4."
 
       - name: Compress system.img.ext4 to system.img.ext4.lz4
         run: |
-          cd tar-md5-script-tool
-          lz4 -B6 --content-size system.img.ext4 system.img.ext4.lz4
+          ./lz4/lz4.exe --content-size tar-md5-script-tool/system.img.ext4 tar-md5-script-tool/system.img.ext4.lz4
           Write-Host "Compressed system.img.ext4 to system.img.ext4.lz4."
+          cd tar-md5-script-tool
           rm -f system.img.ext4       
 
       - name: Check md5 directory
