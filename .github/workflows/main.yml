@@ -57,7 +57,7 @@ jobs:
           ./lz4/lz4.exe --content-size tar-md5-script-tool/system.img.ext4 tar-md5-script-tool/system.img.ext4.lz4
           Write-Host "Compressed system.img.ext4 to system.img.ext4.lz4."
           cd tar-md5-script-tool
-          rm -f system.img.ext4       
+          rm -force system.img.ext4       
 
       - name: Check md5 directory
         run: |
