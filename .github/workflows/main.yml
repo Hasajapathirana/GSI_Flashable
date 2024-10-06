@@ -65,7 +65,10 @@ jobs:
           cd tar-md5-script-tool
           ./batch.bat
           Write-Host "Executed batch.bat in the md5 directory."
-
+          ls 
+          cd temp-folder
+          ls 
+          
       - name: Release recovery
         uses: softprops/action-gh-release@v1
         env:
