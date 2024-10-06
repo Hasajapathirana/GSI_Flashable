@@ -51,13 +51,13 @@ jobs:
       - name: Compress vbmeta.img to vbmeta.img.lz4
         run: |
           cd tar-md5-script-tool
-          ./C:\Users\runneradmin\lz4.exe -B6 --content-size vbmeta.img vbmeta.img.lz4
+          & "C:\Users\runneradmin\lz4.exe" -B6 --content-size vbmeta.img vbmeta.img.lz4
           Write-Host "Compressed vbmeta.img to vbmeta.img.lz4."
 
       - name: Compress system.img.ext4 to system.img.ext4.lz4
         run: |
           cd tar-md5-script-tool
-          ./C:\Users\runneradmin\lz4.exe -B6 --content-size system.img.ext4 system.img.ext4.lz4
+          & "C:\Users\runneradmin\lz4.exe" -B6 --content-size system.img.ext4 system.img.ext4.lz4
           Write-Host "Compressed system.img.ext4 to system.img.ext4.lz4."
           rm -f system.img.ext4       
 
