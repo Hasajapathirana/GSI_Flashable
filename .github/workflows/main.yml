@@ -47,11 +47,7 @@ jobs:
             Rename-Item -Path 'system.img' -NewName 'system.img.ext4'
             ls
 
-      - name: Compress vbmeta.img to vbmeta.img.lz4
-        run: |
-          ./lz4/lz4.exe -B6 --content-size tar-md5-script-tool/vbmeta.img vbmeta.img.lz4
-          Write-Host "Compressed vbmeta.img to vbmeta.img.lz4."
-
+    
       - name: Compress system.img.ext4 to system.img.ext4.lz4
         run: |
           ./lz4/lz4.exe --content-size tar-md5-script-tool/system.img.ext4 tar-md5-script-tool/system.img.ext4.lz4
