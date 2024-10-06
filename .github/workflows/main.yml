@@ -6,11 +6,11 @@ on:
       download_url:
         description: 'URL to download the .xz file'
         required: true
-        default: 'https://example.com/path/to/file.xz'
+        default: https://github.com/ChonDoit/treble_crdroid_patches/releases/download/A13-Signed/Crdroid_A13-arm64-bvS_20240701.img.xz'
       gsi_rom_name:
         description: 'Name of the GSI ROM'
         required: true
-        default: 'CustomGSI'
+        default: 'CrDroid'
 
 
 jobs:
@@ -77,4 +77,4 @@ jobs:
           tag_name: ${{ github.run_id }}
           name: ${{ github.event.inputs.gsi_rom_name }} GSI
           files: |
-           tar-md5-script-tool\temp-folder\
+           tar-md5-script-tool\temp-folder\AP_TAR_MD5_CUSTOM_FILE_ODIN.tar.md5
