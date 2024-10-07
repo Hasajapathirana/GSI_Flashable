@@ -10,7 +10,7 @@ on:
       gsi_rom_name:
         description: 'Name of the GSI ROM'
         required: true
-        default: 'CrDroid'
+        default: CrDroid-BVS
 
 
 jobs:
@@ -77,4 +77,4 @@ jobs:
           tag_name: ${{ github.run_id }}
           name: ${{ github.event.inputs.gsi_rom_name }} GSI
           files: |
-           tar-md5-script-tool/temp-folder/*
+           tar-md5-script-tool/temp-folder/**
