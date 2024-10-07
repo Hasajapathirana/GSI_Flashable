@@ -6,7 +6,7 @@ on:
       download_url:
         description: 'URL to download the .xz file'
         required: true
-        default: https://github.com/ChonDoit/treble_crdroid_patches/releases/download/A13-Signed/Crdroid_A13-arm64-bvS_20240701.img.xz'
+        default: https://github.com/ChonDoit/treble_crdroid_patches/releases/download/A13-Signed/Crdroid_A13-arm64-bvS_20240701.img.xz
       gsi_rom_name:
         description: 'Name of the GSI ROM'
         required: true
@@ -30,7 +30,7 @@ jobs:
       - name: Download the .xz 
         run: |
           $url = '${{ github.event.inputs.download_url }}'
-          $output = "system.img.xz"
+          $output = 'system.img.xz'
           cd tar-md5-script-tool
           curl -L $url -o $output
          
