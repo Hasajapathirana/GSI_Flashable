@@ -77,4 +77,4 @@ jobs:
           tag_name: ${{ github.run_id }}
           name: ${{ github.event.inputs.gsi_rom_name }} GSI
           files: |
-           tar-md5-script-tool/temp-folder/**
+           tar-md5-script-tool/temp-folder/AP_TAR_MD5_CUSTOM_FILE_ODIN.tar.md5
