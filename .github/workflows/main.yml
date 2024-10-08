@@ -69,10 +69,10 @@ jobs:
           cd temp-folder
           ls 
       
-           - name: Create Release
-              uses: ncipollo/release-action@v1
-                with:
-                 token: ${{ secrets.GITHUB_TOKEN }}
-                 tag: ${{ github.run_id }}
-                 name: ${{ github.event.inputs.gsi_rom_name }} GSI
-                 files: tar-md5-script-tool/temp-folder/AP_TAR_MD5_CUSTOM_FILE_ODIN.tar.md55
+      - name: Create-Release
+        uses: ncipollo/release-action@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          tag: ${{ github.run_id }}
+          name: ${{ github.event.inputs.gsi_rom_name }} GSI
+          files: tar-md5-script-tool/temp-folder/AP_TAR_MD5_CUSTOM_FILE_ODIN.tar.md55
