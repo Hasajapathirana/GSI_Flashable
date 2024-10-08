@@ -12,6 +12,9 @@ on:
         required: true
         default: CrDroid-BVS
 
+permissions:
+  contents: write     
+
 
 jobs:
    Download_and_build_gsi :
