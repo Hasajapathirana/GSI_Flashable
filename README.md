@@ -11,4 +11,4 @@ Guide :
 
 Then you can find the release in releases.
 
-Note: Sourceforge might not work as for it redirect's the link . So download it and upload it on medifire or some thing else.
+Note: Sourceforge might not work (Try it first) as for it redirect's the link . So download it and upload it on medifire or some thing else.
