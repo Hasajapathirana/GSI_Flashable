@@ -23,6 +23,11 @@ jobs:
       - name: Set up the repository
         uses: actions/checkout@v3
 
+      - name: Set Git config
+        run: |
+          git config --global user.email "hasajapathirana2011@gmail.com"
+          git config --global user.name "Hasajapathirana"
+
       - name: Install Git LFS
         run: |
           git lfs install
