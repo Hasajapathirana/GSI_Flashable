@@ -53,7 +53,7 @@ jobs:
     
       - name: Compress system.img.ext4 to system.img.ext4.lz4
         run: |
-          ./lz4/lz4.exe --content-size tar-md5-script-tool/system.img.ext4 tar-md5-script-tool/system.img.ext4.lz4
+          ./lz4/lz4.exe -B6 --content-size tar-md5-script-tool/system.img.ext4 tar-md5-script-tool/system.img.ext4.lz4
           Write-Host "Compressed system.img.ext4 to system.img.ext4.lz4."
           cd tar-md5-script-tool
           rm -force system.img.ext4       
