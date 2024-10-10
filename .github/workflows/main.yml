@@ -34,44 +34,23 @@ jobs:
         run: |
           $url = '${{ github.event.inputs.download_url }}'
           $output = 'system.img.xz'
-          cd tar-md5-script-tool
           curl -L $url -o $output
          
       - name: Extract the .xz file using tar
         run: |
-           cd tar-md5-script-tool
            7z e system.img.xz
-           ls  
+           ls
 
       - name: Rename system.img to system.img.ext4
         run: |
-            cd tar-md5-script-tool
-            ls
             Rename-Item -Path 'system.img' -NewName 'system.img.ext4'
             ls
 
-    
-      - name: Compress system.img.ext4 to system.img.ext4.lz4
+      - name: Compress to odin  flashable 
         run: |
-          ./lz4/lz4.exe --content-size tar-md5-script-tool/system.img.ext4 tar-md5-script-tool/system.img.ext4.lz4
-          Write-Host "Compressed system.img.ext4 to system.img.ext4.lz4."
-          cd tar-md5-script-tool
-          rm -force system.img.ext4       
+           7z a -ttar ${{ github.event.inputs.gsi_rom_name }}-GSI.tar system.img.ext4 vbmeta.img
+        
 
-      - name: Check md5 directory
-        run: |
-          cd tar-md5-script-tool 
-          ls
-          
-      - name: Run batch.bat in the md5 directory
-        run: |
-          cd tar-md5-script-tool
-          ./batch.bat
-          Write-Host "Executed batch.bat in the md5 directory."
-          ls 
-          cd temp-folder
-          ls
-          pwd
           
       - name: Release recovery
         uses: softprops/action-gh-release@v1
@@ -81,6 +60,6 @@ jobs:
           tag_name: ${{ github.run_id }}
           name: ${{ github.event.inputs.gsi_rom_name }} GSI
           files: |
-           tar-md5-script-tool/temp-folder/AP_TAR_MD5_CUSTOM_FILE_ODIN.tar.md5
+             *tar*
           
     
