@@ -13,55 +13,74 @@ on:
         default: CrDroid-BVS
 
 permissions:
-  contents: write
+  contents: write     
+
 
 jobs:
-  Download_and_build_gsi:
+   Download_and_build_gsi :
     runs-on: windows-latest
 
     steps:
       - name: Set up the repository
         uses: actions/checkout@v3
-
-      - name: Set Git config
+ 
+      - name: Download 7zip 
         run: |
-          git config --global user.email "hasajapathirana2011@gmail.com"
-          git config --global user.name "Hasajapathirana"
+           choco install wget
+           wget https://www.7-zip.org/a/7z2301-x64.exe -O 7zip_installer.exe
+           ./7zip_installer.exe /S         
 
-      - name: Install Git LFS
-        run: |
-          git lfs install
-
-      - name: Download 7zip
-        run: |
-          choco install wget
-          wget https://www.7-zip.org/a/7z2301-x64.exe -O 7zip_installer.exe
-          ./7zip_installer.exe /S
-
-      - name: Download the .xz
+      - name: Download the .xz 
         run: |
           $url = '${{ github.event.inputs.download_url }}'
           $output = 'system.img.xz'
+          cd tar-md5-script-tool
           curl -L $url -o $output
-
+         
       - name: Extract the .xz file using tar
         run: |
-          7z e system.img.xz
-          ls
+           cd tar-md5-script-tool
+           7z e system.img.xz
+           ls  
 
       - name: Rename system.img to system.img.ext4
         run: |
-          Rename-Item -Path 'system.img' -NewName 'system.img.ext4'
+            cd tar-md5-script-tool
+            ls
+            Rename-Item -Path 'system.img' -NewName 'system.img.ext4'
+            ls
+
+    
+      - name: Compress system.img.ext4 to system.img.ext4.lz4
+        run: |
+          ./lz4/lz4.exe --content-size tar-md5-script-tool/system.img.ext4 tar-md5-script-tool/system.img.ext4.lz4
+          Write-Host "Compressed system.img.ext4 to system.img.ext4.lz4."
+          cd tar-md5-script-tool
+          rm -force system.img.ext4       
+
+      - name: Check md5 directory
+        run: |
+          cd tar-md5-script-tool 
           ls
-
-      - name: Compress to Odin flashable
+          
+      - name: Run batch.bat in the md5 directory
         run: |
-          7z a -ttar "${{ github.event.inputs.gsi_rom_name }}-GSI.tar" system.img.ext4 vbmeta.img
-
-      - name: Upload large file with Git LFS
-        run: |
-          git lfs track "${{ github.event.inputs.gsi_rom_name }}-GSI.tar" # Track the tar file
-          git add .gitattributes
-          git add "${{ github.event.inputs.gsi_rom_name }}-GSI.tar" # Add the tar file
-          git commit -m "Add large GSI tar file using LFS"
-          git push origin main # Push changes to the main branch
+          cd tar-md5-script-tool
+          ./batch.bat
+          Write-Host "Executed batch.bat in the md5 directory."
+          ls 
+          cd temp-folder
+          ls
+          pwd
+          
+      - name: Release recovery
+        uses: softprops/action-gh-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.run_id }}
+          name: ${{ github.event.inputs.gsi_rom_name }} GSI
+          files: |
+           tar-md5-script-tool/temp-folder/AP_TAR_MD5_CUSTOM_FILE_ODIN.tar.md5
+          
+    
