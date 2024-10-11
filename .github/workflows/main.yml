@@ -45,7 +45,7 @@ jobs:
           curl -L $url -o $output
          
       - name: Extract the .xz file using tar
-                run: |
+        run: |
           $url = '${{ github.event.inputs.download_url }}'
           $output = 'system.img.${{ github.event.inputs.compression_type }}'
           cd tar-md5-script-tool
