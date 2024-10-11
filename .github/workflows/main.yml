@@ -11,7 +11,14 @@ on:
         description: 'Name of the GSI ROM'
         required: true
         default: CrDroid-BVS
-
+      compression_type:
+        description: 'Choose the compression type'
+        required: true
+        default: xz
+        options:
+          - xz
+          - gz
+          
 permissions:
   contents: write     
 
@@ -38,10 +45,21 @@ jobs:
           curl -L $url -o $output
          
       - name: Extract the .xz file using tar
+                run: |
+          $url = '${{ github.event.inputs.download_url }}'
+          $output = 'system.img.${{ github.event.inputs.compression_type }}'
+          cd tar-md5-script-tool
+          curl -L $url -o $output
+         
+      - name: Extract the compressed file
         run: |
-           cd tar-md5-script-tool
-           7z e system.img.xz
-           ls  
+          cd tar-md5-script-tool
+          if (${{ github.event.inputs.compression_type }} == 'xz') {
+            7z e system.img.xz
+          } elseif (${{ github.event.inputs.compression_type }} == 'gz') {
+            7z e system.img.gz
+          }
+          ls  
 
       - name: Rename system.img to system.img.ext4
         run: |
