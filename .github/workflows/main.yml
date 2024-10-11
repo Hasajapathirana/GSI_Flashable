@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       download_url:
-        description: 'URL to download the .xz file'
+        description: 'URL to download the .xz or .gz file'
         required: true
         default: https://github.com/ChonDoit/treble_crdroid_patches/releases/download/A13-Signed/Crdroid_A13-arm64-bvS_20240701.img.xz
       gsi_rom_name:
@@ -24,7 +24,7 @@ permissions:
 
 
 jobs:
-   Download_and_build_gsi :
+   Download_and_build_gsi:
     runs-on: windows-latest
 
     steps:
@@ -37,14 +37,7 @@ jobs:
            wget https://www.7-zip.org/a/7z2301-x64.exe -O 7zip_installer.exe
            ./7zip_installer.exe /S         
 
-      - name: Download the .xz 
-        run: |
-          $url = '${{ github.event.inputs.download_url }}'
-          $output = 'system.img.xz'
-          cd tar-md5-script-tool
-          curl -L $url -o $output
-         
-      - name: Extract the .xz file using tar
+      - name: Download the compressed file
         run: |
           $url = '${{ github.event.inputs.download_url }}'
           $output = 'system.img.${{ github.event.inputs.compression_type }}'
@@ -54,44 +47,47 @@ jobs:
       - name: Extract the compressed file
         run: |
           cd tar-md5-script-tool
-          if (${{ github.event.inputs.compression_type }} == 'xz') {
+          if (${{ github.event.inputs.compression_type }} -eq 'xz') {
             7z e system.img.xz
-          } elseif (${{ github.event.inputs.compression_type }} == 'gz') {
+          } elseif (${{ github.event.inputs.compression_type }} -eq 'gz') {
             7z e system.img.gz
           }
           ls  
 
       - name: Rename system.img to system.img.ext4
         run: |
-            cd tar-md5-script-tool
-            ls
-            Rename-Item -Path 'system.img' -NewName 'system.img.ext4'
-            ls
+          cd tar-md5-script-tool
+          Rename-Item -Path 'system.img' -NewName 'system.img.ext4'
+          ls
 
-    
       - name: Compress system.img.ext4 to system.img.ext4.lz4
         run: |
           ./lz4/lz4.exe -B6 --content-size tar-md5-script-tool/system.img.ext4 tar-md5-script-tool/system.img.ext4.lz4
           Write-Host "Compressed system.img.ext4 to system.img.ext4.lz4."
-          cd tar-md5-script-tool
-          rm -force system.img.ext4       
+          Remove-Item tar-md5-script-tool/system.img.ext4       
 
-      - name: Check md5 directory
+      - name: Check file size and decide on saving or releasing
         run: |
-          cd tar-md5-script-tool 
-          ls
-          
-      - name: Run batch.bat in the md5 directory
-        run: |
-          cd tar-md5-script-tool
-          ./batch.bat
-          Write-Host "Executed batch.bat in the md5 directory."
-          ls 
-          cd temp-folder
-          ls
-          pwd
-          
+          cd tar-md5-script-tool/temp-folder
+          $fileSize = (Get-Item 'AP_TAR_MD5_CUSTOM_FILE_ODIN.tar.md5').length
+          if ($fileSize -gt 2147483648) {  # 2GB in bytes
+            Write-Host "File is larger than 2GB. Skipping release and proceeding with save."
+            echo "::set-output name=release::false"
+          } else {
+            Write-Host "File is less than 2GB. Proceeding with both save and release."
+            echo "::set-output name=release::true"
+          }
+
+      - name: Save
+        if: always()
+        uses: actions/upload-artifact@v2
+        with:
+            name: ${{ github.event.inputs.gsi_rom_name }}-GSI.md5
+            files: |
+             tar-md5-script-tool/temp-folder/AP_TAR_MD5_CUSTOM_FILE_ODIN.tar.md5
+             
       - name: Release recovery
+        if: steps.check_file_size.outputs.release == 'true'
         uses: softprops/action-gh-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -100,5 +96,3 @@ jobs:
           name: ${{ github.event.inputs.gsi_rom_name }} GSI
           files: |
            tar-md5-script-tool/temp-folder/AP_TAR_MD5_CUSTOM_FILE_ODIN.tar.md5
-          
-    
