@@ -95,10 +95,9 @@ jobs:
       - name: Save
         uses: actions/upload-artifact@v3
         with:
-            name: ${{ github.event.inputs.gsi_rom_name }}-GSI.md5
-            files: |
-             tar-md5-script-tool/temp-folder/AP_TAR_MD5_CUSTOM_FILE_ODIN.tar.md5
-             
+         name: ${{ github.event.inputs.gsi_rom_name }}.tar.md5
+         path: tar-md5-script-tool/temp-folder/AP_TAR_MD5_CUSTOM_FILE_ODIN.tar.md5
+  
       - name: Release recovery
         if: steps.check_file_size.outputs.release == 'true'
         uses: softprops/action-gh-release@v1
