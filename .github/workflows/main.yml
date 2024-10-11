@@ -68,7 +68,17 @@ jobs:
         run: |
           ./lz4/lz4.exe -B6 --content-size tar-md5-script-tool/system.img.ext4 tar-md5-script-tool/system.img.ext4.lz4
           Write-Host "Compressed system.img.ext4 to system.img.ext4.lz4."
-          Remove-Item tar-md5-script-tool/system.img.ext4       
+          Remove-Item tar-md5-script-tool/system.img.ext4 
+
+      - name: Run batch.bat in the md5 directory
+        run: |
+          cd tar-md5-script-tool
+          ./batch.bat
+          Write-Host "Executed batch.bat in the md5 directory."
+          ls 
+          cd temp-folder
+          ls
+          pwd
 
       - name: Check file size and decide on saving or releasing
         run: |
