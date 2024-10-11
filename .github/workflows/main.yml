@@ -44,13 +44,17 @@ jobs:
           cd tar-md5-script-tool
           curl -L $url -o $output
          
-      - name: Extract the compressed file
+          
+      - name: Extract system image
         run: |
-          cd tar-md5-script-tool
-          if (${{ github.event.inputs.compression_type }} -eq 'xz') {
-            7z e system.img.xz
-          } elseif (${{ github.event.inputs.compression_type }} -eq 'gz') {
-            7z e system.img.gz
+         cd tar-md5-script-tool
+          $compressionType = "${{ github.event.inputs.compression_type }}"
+           if ($compressionType -eq 'gz') {
+           7z e system.img.gz
+          } elseif ($compressionType -eq 'xz') {
+          7z e system.img.xz
+          } else {
+          Write-Host "Unsupported compression type: $compressionType"
           }
           ls  
 
