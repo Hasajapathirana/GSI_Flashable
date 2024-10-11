@@ -80,7 +80,7 @@ jobs:
 
       - name: Save
         if: always()
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
             name: ${{ github.event.inputs.gsi_rom_name }}-GSI.md5
             files: |
