@@ -93,7 +93,7 @@ jobs:
           }
 
       - name: Save
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
          name: ${{ github.event.inputs.gsi_rom_name }}.tar.md5
          path: tar-md5-script-tool/temp-folder/AP_TAR_MD5_CUSTOM_FILE_ODIN.tar.md5
