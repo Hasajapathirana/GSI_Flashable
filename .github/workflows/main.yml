@@ -18,10 +18,9 @@ on:
         options:
           - xz
           - gz
-          
+
 permissions:
   contents: write     
-
 
 jobs:
    Download_and_build_gsi:
@@ -43,8 +42,7 @@ jobs:
           $output = 'system.img.${{ github.event.inputs.compression_type }}'
           cd tar-md5-script-tool
           curl -L $url -o $output
-         
-          
+
       - name: Extract system image
         run: |
          cd tar-md5-script-tool
@@ -86,10 +84,10 @@ jobs:
           $fileSize = (Get-Item 'AP_TAR_MD5_CUSTOM_FILE_ODIN.tar.md5').length
           if ($fileSize -gt 2147483648) {  # 2GB in bytes
             Write-Host "File is larger than 2GB. Skipping release and proceeding with save."
-            echo "::set-output name=release::false"
+            echo "release=false" >> $GITHUB_ENV
           } else {
             Write-Host "File is less than 2GB. Proceeding with both save and release."
-            echo "::set-output name=release::true"
+            echo "release=true" >> $GITHUB_ENV
           }
 
       - name: Save
@@ -99,7 +97,7 @@ jobs:
          path: tar-md5-script-tool/temp-folder/AP_TAR_MD5_CUSTOM_FILE_ODIN.tar.md5
   
       - name: Release recovery
-        if: steps.check_file_size.outputs.release == 'true'
+        if: env.release == 'true'
         uses: softprops/action-gh-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
