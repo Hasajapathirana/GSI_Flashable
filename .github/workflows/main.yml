@@ -14,10 +14,12 @@ on:
       compression_type:
         description: 'Choose the compression type'
         required: true
+        type: choice 
         default: xz
         options:
-          - xz
-          - gz
+           - xz
+           - gz
+           - 7z 
 
 permissions:
   contents: write     
@@ -49,6 +51,9 @@ jobs:
           $compressionType = "${{ github.event.inputs.compression_type }}"
            if ($compressionType -eq 'gz') {
            7z e system.img.gz
+          } elseif ($compressionType -eq '7z') {
+          7z e system.img.7z
+          } else
           } elseif ($compressionType -eq 'xz') {
           7z e system.img.xz
           } else {
