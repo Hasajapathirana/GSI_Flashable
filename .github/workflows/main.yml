@@ -48,18 +48,20 @@ jobs:
       - name: Extract system image
         run: |
          cd tar-md5-script-tool
-          $compressionType = "${{ github.event.inputs.compression_type }}"
-           if ($compressionType -eq 'gz') {
-           7z e system.img.gz
-          } elseif ($compressionType -eq '7z') {
-          7z e system.img.7z
-          } else
-          } elseif ($compressionType -eq 'xz') {
-          7z e system.img.xz
-          } else {
-          Write-Host "Unsupported compression type: $compressionType"
+         $compressionType = "${{ github.event.inputs.compression_type }}"
+         if ($compressionType -eq "gz") {
+         7z e system.img.gz
+         }
+         elseif ($compressionType -eq "7z") {
+         7z e system.img.7z
+         }
+         elseif ($compressionType -eq "xz") {
+         7z e system.img.xz
+         }
+         else {
+         Write-Host "Unsupported compression type: $compressionType"
           }
-          ls  
+          ls 
 
       - name: Rename system.img to system.img.ext4
         run: |
