@@ -67,8 +67,9 @@ jobs:
       - name: Rename System Image
         run: |
           cd tar-md5-script-tool
-          $img = Get-ChildItem *.img | Sort-Object Length -Descending | Select-Object -First 1 Rename-Item $img.FullName "system.img"
-
+          Get-ChildItem *.img | Select-Object -First 1 | Rename-Item -NewName "system.img"
+          ls
+          
       - name: Rename system.img to system.img.ext4
         run: |
           cd tar-md5-script-tool
